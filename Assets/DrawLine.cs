@@ -5,18 +5,14 @@ using UnityEngine;
 public class DrawLine : MonoBehaviour
 {
     public GameObject linePrefab;
-    public GameObject CurrentLine;
-    public GameObject ball;
+    GameObject CurrentLine;
 
-    public LineRenderer lineRenderer;
-    public EdgeCollider2D edgeCollider;
+    LineRenderer lineRenderer;
+    EdgeCollider2D edgeCollider;
+    Rigidbody2D rb2D;
 
     public List<Vector2> fingerPos;
 
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
@@ -34,6 +30,13 @@ public class DrawLine : MonoBehaviour
 
             }
         }
+        if (Input.GetMouseButtonUp(0))
+        {
+            lineRenderer.useWorldSpace = false;
+            rb2D.simulated = true;
+
+
+        }
     }
 
 
@@ -42,6 +45,7 @@ public class DrawLine : MonoBehaviour
         CurrentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
         lineRenderer = CurrentLine.GetComponent<LineRenderer>();
         edgeCollider = CurrentLine.GetComponent<EdgeCollider2D>();
+        rb2D = CurrentLine.GetComponent<Rigidbody2D>();
 
         fingerPos.Clear();
 
@@ -54,10 +58,6 @@ public class DrawLine : MonoBehaviour
 
         edgeCollider.points = fingerPos.ToArray();
 
-        for (int i = fingerPos.Count - 1; i < fingerPos.Count; i++)
-        {
-            GameObject Ball = Instantiate(ball, new Vector2(fingerPos[i].x, fingerPos[i].y), Quaternion.identity);
-        }
     }
 
     void UpdateLine(Vector2 newFingerPos)
@@ -68,9 +68,5 @@ public class DrawLine : MonoBehaviour
 
         edgeCollider.points = fingerPos.ToArray();
 
-        for (int i = fingerPos.Count - 1; i < fingerPos.Count; i++)
-        {
-            GameObject Ball = Instantiate(ball, new Vector2(fingerPos[i].x, fingerPos[i].y), Quaternion.identity);
-        }
     }
 }
